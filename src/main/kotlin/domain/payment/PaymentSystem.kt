@@ -25,7 +25,7 @@ class PaymentSystem(
                     )
             }
         }
-        total -= point.amount
+        total -= point.toCash()
         return paymentDiscountPolicy.discount(total, payment)
     }
 }
