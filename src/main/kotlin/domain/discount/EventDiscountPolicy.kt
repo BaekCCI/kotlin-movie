@@ -41,14 +41,14 @@ class TimeEvent : EventDiscountPolicy {
         money: Money,
         dateTime: LocalDateTime,
     ): Money {
-        if (dateTime.toLocalTime() !in DISCOUNT_BEFORE_TIME..<DISCOUNT_AFTER_TIME) return money - DISCOUNT_AMOUNT
+        if (dateTime.toLocalTime() !in PEEK_START_TIME..<PEEK_END_TIME) return money - DISCOUNT_AMOUNT
 
         return money
     }
 
     companion object {
-        private val DISCOUNT_BEFORE_TIME = LocalTime.of(11, 0)
-        private val DISCOUNT_AFTER_TIME = LocalTime.of(20, 0)
+        private val PEEK_START_TIME = LocalTime.of(11, 0)
+        private val PEEK_END_TIME = LocalTime.of(20, 0)
 
         private val DISCOUNT_AMOUNT = Money(2000)
     }
