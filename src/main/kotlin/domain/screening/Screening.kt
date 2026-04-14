@@ -37,7 +37,7 @@ class Screening(
             startTime = this.startTime,
         )
 
-    fun canReserve(positions: SeatPositions) {
+    fun isReservable(positions: SeatPositions) {
         require(positions.positions.all { seats.canReserve(it) }) { "이미 예약된 좌석입니다." }
     }
 }
