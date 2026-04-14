@@ -1,5 +1,6 @@
 package domain
 
+import domain.payment.Money
 import domain.seat.Column
 import domain.seat.Row
 import domain.seat.SeatGrade
@@ -19,7 +20,7 @@ class SeatGradeTest {
         given: SeatGrade,
         expected: Int,
     ) {
-        assertThat(given.price).isEqualTo(expected)
+        assertThat(given.price).isEqualTo(Money(expected))
     }
 
     @ParameterizedTest(name = "행: {0}, 열: {1}")

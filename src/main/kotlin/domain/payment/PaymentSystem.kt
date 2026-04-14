@@ -5,7 +5,6 @@ import domain.discount.PaymentDiscount
 import domain.discount.PaymentDiscountPolicy
 import domain.discount.TheaterEventDiscount
 import domain.reservation.TicketBucket
-import domain.seat.SeatGrade
 
 class PaymentSystem(
     private val eventDiscountPolicy: EventDiscountPolicy = TheaterEventDiscount(),
@@ -21,7 +20,7 @@ class PaymentSystem(
             ticket.seatPositions.positions.forEach { position ->
                 total +=
                     eventDiscountPolicy.discount(
-                        Money(position.price),
+                        position.price,
                         ticket.screening.startTime,
                     )
             }
