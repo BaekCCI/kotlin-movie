@@ -80,7 +80,7 @@ class Controller(
             OutputView.selectSeatsPrompt(screening.seats)
             val input = InputView.read()
             val selectedSeats = InputParser.parseSeats(input)
-            screening.checkReservable(selectedSeats)
+            screening.isReservable(selectedSeats)
 
             ticketBucket.addTicket(screening, selectedSeats)
         }
