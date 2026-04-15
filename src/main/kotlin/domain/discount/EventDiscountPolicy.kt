@@ -11,9 +11,9 @@ interface EventDiscountPolicy {
     ): Money
 }
 
-class TheaterEventDiscount(
-    val policies: List<EventDiscountPolicy> = listOf(MovieDayEvent(), TimeEvent()),
-) : EventDiscountPolicy {
+class TheaterEventDiscount : EventDiscountPolicy {
+    private val policies = listOf(MovieDayEvent(), TimeEvent())
+
     override fun discount(
         money: Money,
         dateTime: LocalDateTime,
