@@ -1,5 +1,6 @@
 package domain
 
+import domain.fixture.createScreeningRoom
 import domain.screening.ScreeningRoom
 import domain.screening.ScreeningRoomName
 import domain.screening.TimeRange
@@ -25,11 +26,7 @@ class ScreeningRoomTest {
     @Test
     fun `이름이 공백일 경우 예외를 던진다`() {
         assertThrows(IllegalArgumentException::class.java) {
-            ScreeningRoom(
-                name = ScreeningRoomName(" "),
-                operatingTime = TimeRange(LocalTime.of(10, 0), LocalTime.of(18, 0)),
-                seats = Seats(listOf(Seat(SeatPosition(Row.A, Column(1))))),
-            )
+            createScreeningRoom(name = " ")
         }
     }
 

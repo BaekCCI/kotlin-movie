@@ -1,5 +1,6 @@
 package domain
 
+import domain.fixture.createSeatPosition
 import domain.seat.Column
 import domain.seat.ReserveState
 import domain.seat.Row
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test
 class SeatTest {
     @Test
     fun `행과 열을 가진다`() {
-        Seat(position = SeatPosition(row = Row.A, column = Column(1)))
+        Seat(position = createSeatPosition())
     }
 
     @Test
@@ -25,14 +26,14 @@ class SeatTest {
 
     @Test
     fun `좌석 위치에 따른 등급을 안다`() {
-        val given = Seat(position = SeatPosition(row = Row.A, column = Column(1)))
+        val given = Seat(position = createSeatPosition(row = "A", column = 1))
         val expected = SeatGrade.B
         assertThat(given.grade).isEqualTo(expected)
     }
 
     @Test
     fun `좌석의 초기 예약 상태는 예약 가능한 상태이다`() {
-        val given = Seat(position = SeatPosition(row = Row.A, column = Column(1)))
+        val given = Seat(position = createSeatPosition())
         val expected = ReserveState.AVAILABLE
         assertThat(given.state).isEqualTo(expected)
     }
