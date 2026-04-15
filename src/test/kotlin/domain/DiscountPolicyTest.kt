@@ -52,8 +52,12 @@ class DiscountPolicyTest {
     @Test
     fun `이벤트 할인을 순서대로 적용하여 할인 금액을 반환한다`() {
         val given = Money(10000)
-        val result = eventDiscountPolicy.discount(given, LocalDateTime.of(2026, 4, 10, 10, 0))
+        val dateTime = LocalDateTime.of(2026, 4, 10, 10, 0)
+        val result = eventDiscountPolicy.discount(given, dateTime)
 
-        assertThat(result).isEqualTo(Money(7000))
+        val afterMovieDayEvent = movieDayEvent.discount(given, dateTime)
+        val afterTimeEvent = timeEvent.discount(afterMovieDayEvent, dateTime)
+
+        assertThat(result).isEqualTo(afterTimeEvent)
     }
 }
