@@ -23,13 +23,14 @@ data class ScreeningSchedule(
         date: LocalDate,
     ): ScreeningSchedule = ScreeningSchedule(screenings.filter { it.movie.title == title && it.startTime.toLocalDate() == date })
 
-    fun reserve(bucket: TicketBucket) {
-        bucket.tickets.forEach { ticket ->
-            val target =
-                screenings.find { screening -> screening.id == ticket.screening.id }
-                    ?: throw IllegalArgumentException("존재하지 않는 상영 입니다.")
-
-            target.reserve(ticket.seatPositions)
-        }
+    fun reserve(bucket: TicketBucket): ScreeningSchedule {
+        val updatedScreenings =
+            bucket.tickets.fold(screenings) { acc, ticket ->
+                require(acc.any { it.id == ticket.screening.id }) { "존재하지 않는 상영 입니다." }
+                acc.map { screening ->
+                    if (screening.id == ticket.screening.id) screening.reserve(ticket.seatPositions) else screening
+                }
+            }
+        return copy(screenings = updatedScreenings)
     }
 }

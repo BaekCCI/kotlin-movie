@@ -13,7 +13,7 @@ import view.OutputView
 import java.time.LocalDate
 
 class Controller(
-    val schedule: ScreeningSchedule,
+    var schedule: ScreeningSchedule,
 ) {
     val paymentSystem = PaymentSystem()
 
@@ -38,7 +38,7 @@ class Controller(
 
         if (!confirmPurchase(totalPrice)) return
 
-        schedule.reserve(bucket = ticketBucket)
+        schedule = schedule.reserve(bucket = ticketBucket)
 
         OutputView.displayResult(ticketBucket, totalPrice, point)
     }
