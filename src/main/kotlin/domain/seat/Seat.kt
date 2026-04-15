@@ -5,7 +5,7 @@ data class Seat(
     val state: ReserveState = ReserveState.AVAILABLE,
 ) {
     val grade: SeatGrade
-        get() = SeatGrade.Companion.of(position)
+        get() = SeatGrade.of(position)
 
     fun changeState(state: ReserveState): Seat = this.copy(state = state)
 
