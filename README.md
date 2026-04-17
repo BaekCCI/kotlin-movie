@@ -25,6 +25,11 @@
 - [x] ReservationSeatTable
     - 예약 id, 행, 열
 
-### Repository 구현
+### Repository
+
+- [ ] ScreeningRepository
+    - [ ] 전체 상영 스케줄 조회
+- [ ] ReservationRepository
+    - [ ] 예약 정보 저장
 
 ### 연동
