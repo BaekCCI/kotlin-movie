@@ -27,9 +27,9 @@
 
 ### Repository
 
-- [ ] ScreeningRepository
-    - [ ] 전체 상영 스케줄 조회
-- [ ] ReservationRepository
-    - [ ] 예약 정보 저장
+- [x] ScreeningRepository
+    - [x] 전체 상영 스케줄 조회
+- [x] ReservationRepository
+    - [x] 예약 정보 저장
 
 ### 연동
