@@ -5,5 +5,5 @@ data class ReservationResponse(
     val reservations: List<ReservationDto>,
     val usedPoints: Int,
     val paymentMethod: String,
-    val totalPrice: Int
+    val totalPrice: Int,
 )

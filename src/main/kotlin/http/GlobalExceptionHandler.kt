@@ -8,6 +8,5 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 @RestControllerAdvice
 class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException::class, NoSuchElementException::class)
-    fun handleBadRequest(e: RuntimeException): ResponseEntity<String> =
-        ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message)
+    fun handleBadRequest(e: RuntimeException): ResponseEntity<String> = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message)
 }

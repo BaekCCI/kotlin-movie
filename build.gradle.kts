@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "2.3.0"
     id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
 
-    //spring
+    // spring
     kotlin("plugin.spring") version "2.3.0"
     id("org.springframework.boot") version "4.0.5"
     id("io.spring.dependency-management") version "1.1.7"
@@ -27,7 +27,7 @@ dependencies {
     // H2 의존성 추가
     runtimeOnly("com.h2database:h2:2.4.240")
 
-    //spring
+    // spring
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
