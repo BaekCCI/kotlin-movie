@@ -32,4 +32,11 @@
 - [x] ReservationRepository
     - [x] 예약 정보 저장
 
-### 연동
+### API
+
+- [x] `GET /api/movies` 영화 목록 조회
+- [x] `POST /api/reservations` 예매 생성
+    - [x] 예외 처리 (400 Bad Request)
+        - 존재하지 않는 상영 ID
+        - 유효하지 않은 결제 수단
+        - 중복된 좌석
