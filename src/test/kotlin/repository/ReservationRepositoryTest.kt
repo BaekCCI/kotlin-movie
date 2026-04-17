@@ -59,7 +59,6 @@ class ReservationRepositoryTest {
     @Test
     fun `여러 티켓을 저장하면 티켓 수만큼 RESERVATION 행이 저장된다`() {
         val screenings = ScreeningRepository(connection).getSchedule().screenings
-        // screenings[0]: 인터스텔라 13:30~16:19, screenings[2]: 오펜하이머 10:00~13:00 (비겹침)
         val ticketBucket =
             TicketBucket()
                 .addTicket(screenings[0], createSeatPositions("A" to 1))

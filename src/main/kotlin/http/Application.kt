@@ -27,10 +27,8 @@ fun main(args: Array<String>) {
     runApplication<Application>(*args)
 }
 
-
 @RestController
 class Controller {
-
     @GetMapping("/api/movies")
     fun getMovies(): ResponseEntity<MoviesDto> {
         val repo = ScreeningRepository(DatabaseConfig.getConnection())
@@ -42,42 +40,49 @@ class Controller {
                     id = (index + 1).toLong(),
                     title = movie.title.title,
                     runningTimeMinutes = movie.runningTime.duration,
-                    screenings = screenings.map { screening ->
-                        ScreeningDto(
-                            id = screening.id.toLong(),
-                            startTime = screening.startTime,
-                            endAt = screening.startTime.plusMinutes(movie.runningTime.duration.toLong())
-                        )
-                    }
+                    screenings =
+                        screenings.map { screening ->
+                            ScreeningDto(
+                                id = screening.id.toLong(),
+                                startTime = screening.startTime,
+                                endAt = screening.startTime.plusMinutes(movie.runningTime.duration.toLong()),
+                            )
+                        },
                 )
             }
         return ResponseEntity.ok(MoviesDto(movieDtos))
     }
 
     @PostMapping("/api/reservations")
-    fun reserve(@RequestBody reservations: ReservationsDto): ResponseEntity<ReservationResponse> {
+    fun reserve(
+        @RequestBody reservations: ReservationsDto,
+    ): ResponseEntity<ReservationResponse> {
         val reservationRepo = ReservationRepository(DatabaseConfig.getConnection())
         val screeningRepo = ScreeningRepository(DatabaseConfig.getConnection())
 
         val screenings = screeningRepo.getSchedule().screenings
-        val ticketBucket = reservations.reservations.fold(TicketBucket()) { bucket, reservation ->
-            val screening = screenings.first { it.id == reservation.screeningId.toString() }
+        val ticketBucket =
+            reservations.reservations.fold(TicketBucket()) { bucket, reservation ->
+                val screening = screenings.first { it.id == reservation.screeningId.toString() }
 
-            val positions = SeatPositions(
-                reservation.seats.map { seat ->
-                    SeatPosition(
-                        row = Row.valueOf(seat.take(1)),
-                        column = Column(seat.drop(1).toInt())
+                val positions =
+                    SeatPositions(
+                        reservation.seats.map { seat ->
+                            SeatPosition(
+                                row = Row.valueOf(seat.take(1)),
+                                column = Column(seat.drop(1).toInt()),
+                            )
+                        },
                     )
-                }
-            )
-            bucket.addTicket(screening, positions)
-        }
-        val totalPrice = PaymentSystem().calculate(
-            point = Point(reservations.usedPoints),
-            payment = PaymentType.valueOf(reservations.paymentMethod),
-            ticketBucket = ticketBucket
-        ).amount
+                bucket.addTicket(screening, positions)
+            }
+        val totalPrice =
+            PaymentSystem()
+                .calculate(
+                    point = Point(reservations.usedPoints),
+                    payment = PaymentType.valueOf(reservations.paymentMethod),
+                    ticketBucket = ticketBucket,
+                ).amount
         reservationRepo.save(ticketBucket)
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ReservationResponse(
@@ -86,7 +91,7 @@ class Controller {
                 usedPoints = reservations.usedPoints,
                 paymentMethod = reservations.paymentMethod,
                 totalPrice = totalPrice,
-            )
+            ),
         )
     }
 }
