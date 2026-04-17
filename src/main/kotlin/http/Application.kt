@@ -1,17 +1,21 @@
 package http
 
 import database.DatabaseConfig
+import domain.payment.PaymentSystem
+import domain.payment.PaymentType
+import domain.payment.Point
 import domain.reservation.TicketBucket
-import domain.screening.Screening
 import domain.seat.Column
 import domain.seat.Row
 import domain.seat.SeatPosition
 import domain.seat.SeatPositions
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import repository.ReservationRepository
 import repository.ScreeningRepository
@@ -27,7 +31,7 @@ fun main(args: Array<String>) {
 @RestController
 class Controller {
 
-    @GetMapping("/movies")
+    @GetMapping("/api/movies")
     fun getMovies(): ResponseEntity<MoviesDto> {
         val repo = ScreeningRepository(DatabaseConfig.getConnection())
         val screenings = repo.getSchedule().screenings
@@ -50,8 +54,8 @@ class Controller {
         return ResponseEntity.ok(MoviesDto(movieDtos))
     }
 
-    @PostMapping("/reservations")
-    fun reserve(reservations: ReservationsDto): ResponseEntity<ReservationsDto> {
+    @PostMapping("/api/reservations")
+    fun reserve(@RequestBody reservations: ReservationsDto): ResponseEntity<ReservationResponse> {
         val reservationRepo = ReservationRepository(DatabaseConfig.getConnection())
         val screeningRepo = ScreeningRepository(DatabaseConfig.getConnection())
 
@@ -69,7 +73,20 @@ class Controller {
             )
             bucket.addTicket(screening, positions)
         }
+        val totalPrice = PaymentSystem().calculate(
+            point = Point(reservations.usedPoints),
+            payment = PaymentType.valueOf(reservations.paymentMethod),
+            ticketBucket = ticketBucket
+        ).amount
         reservationRepo.save(ticketBucket)
-        return ResponseEntity.ok(reservations)
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            ReservationResponse(
+                reservationId = 1,
+                reservations = reservations.reservations,
+                usedPoints = reservations.usedPoints,
+                paymentMethod = reservations.paymentMethod,
+                totalPrice = totalPrice,
+            )
+        )
     }
 }
